@@ -42,12 +42,10 @@ const launchWebScraper = async () => {
       }
     });
 
-    return {
-      jobs
-    };
+    return jobs;
   });
 
-  console.dir(data, { depth: null });
+  console.log(data);
   await browser.close();
 };
 
