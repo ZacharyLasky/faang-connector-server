@@ -1,7 +1,10 @@
-const puppeteer = require('puppeteer');
-const db = require('../../data/db');
+import puppeteer from 'puppeteer';
 
-const jobList = () => {
+// The babel async function code isn't compatible with Puppeteer.
+// Puppeteer calls function.toString and send the code into Chromium.
+// But babel messes with that and we end up sending an incomplete string.
+// You get around this by using template strings instead of functions.
+const jobList = `(async () => {
   const jobResultNodes = document.querySelector('#search-results');
 
   let jobTitles = [];
@@ -41,9 +44,9 @@ const jobList = () => {
   });
 
   return jobs;
-};
+})()`;
 
-const launchGoogleWebScraper = async () => {
+export const launchGoogleWebScraper = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const jobsUrl =
@@ -51,22 +54,6 @@ const launchGoogleWebScraper = async () => {
   await page.goto(jobsUrl, { waitUntil: 'networkidle2' });
   const jobData = await page.evaluate(jobList);
 
-  db('jobs')
-    .del()
-    .then((res) => {
-      console.log(`Deleted ${res} records`);
-      db.batchInsert('jobs', jobData)
-        .returning('*')
-        .then((res) => console.log(`Inserted ${res.length} records`))
-        .catch((err) =>
-          console.log('Could not insert data. Failed with the following error: ', err)
-        );
-    })
-    .catch((err) => console.log('Could not insert data. Failed with the following error: ', err));
-
   await browser.close();
+  return jobData;
 };
-
-launchGoogleWebScraper();
-
-module.exports = { launchGoogleWebScraper };
