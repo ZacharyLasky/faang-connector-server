@@ -37,7 +37,8 @@ const launchWebScraper = async () => {
           jobTitle: jobTitles[i],
           jobQualifications: [...new Set(jobQualifications)].filter((qualification) =>
             text.includes(qualification)
-          )
+          ),
+          jobsUrl
         });
       }
     });
