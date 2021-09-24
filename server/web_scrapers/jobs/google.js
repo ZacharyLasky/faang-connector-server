@@ -41,6 +41,7 @@ const launchWebScraper = async () => {
           job_qualifications: [...new Set(jobQualifications)].filter((qualification) =>
             text.includes(qualification)
           ),
+          company: 'google',
           jobs_url: jobsUrl
         });
       }
@@ -49,10 +50,18 @@ const launchWebScraper = async () => {
     return jobs;
   });
 
-  db.batchInsert('google', jobData)
-    .returning('*')
-    .then((res) => console.log('Inserted the following data: ', res))
-    .catch((err) => console.log('Could not insert data. Failed with error: ', err));
+  db('jobs')
+    .del()
+    .then((res) => {
+      console.log(`Deleted ${res} records`);
+      db.batchInsert('jobs', jobData)
+        .returning('*')
+        .then((res) => console.log('Inserted the following data: ', res))
+        .catch((err) =>
+          console.log('Could not insert data. Failed with the following error: ', err)
+        );
+    })
+    .catch((err) => console.log('Could not insert data. Failed with the following error: ', err));
 
   await browser.close();
 };
