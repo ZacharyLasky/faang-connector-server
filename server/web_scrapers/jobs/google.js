@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const db = require('../../data/db');
 
-const launchWebScraper = async () => {
+const launchGoogleWebScraper = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const jobsUrl =
@@ -56,7 +56,7 @@ const launchWebScraper = async () => {
       console.log(`Deleted ${res} records`);
       db.batchInsert('jobs', jobData)
         .returning('*')
-        .then((res) => console.log('Inserted the following data: ', res))
+        .then((res) => console.log(`Inserted ${res.length} records`))
         .catch((err) =>
           console.log('Could not insert data. Failed with the following error: ', err)
         );
@@ -66,4 +66,6 @@ const launchWebScraper = async () => {
   await browser.close();
 };
 
-launchWebScraper();
+launchGoogleWebScraper();
+
+module.exports = { launchGoogleWebScraper };
