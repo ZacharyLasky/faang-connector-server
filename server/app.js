@@ -14,21 +14,26 @@ app.listen(port, () => {
 });
 
 const launchWebScrapers = async () => {
-  let jobData = [];
-  await launchGoogleWebScraper().then((res) => jobData.push(...res));
+  const googleJobs = await launchGoogleWebScraper();
 
-  db('jobs')
-    .del()
-    .then((res) => {
-      console.log(`Deleted ${res} records`);
-      db.batchInsert('jobs', jobData)
-        .returning('*')
-        .then((res) => console.log(`Inserted ${res.length} records`))
+  Promise.all(googleJobs)
+    .then((jobData) => {
+      db('jobs')
+        .del()
+        .then((res) => {
+          console.log(`Deleted ${res} records`);
+          db.batchInsert('jobs', jobData)
+            .returning('*')
+            .then((res) => console.log(`Inserted ${res.length} records`))
+            .catch((err) =>
+              console.log('Could not insert data. Failed with the following error: ', err)
+            );
+        })
         .catch((err) =>
           console.log('Could not insert data. Failed with the following error: ', err)
         );
     })
-    .catch((err) => console.log('Could not insert data. Failed with the following error: ', err));
+    .catch((err) => console.log('Could not get data. Failed with the following error: ', err));
 };
 
 launchWebScrapers();
