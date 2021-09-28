@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+const puppeteer = require('puppeteer');
 
 // The babel async function code isn't compatible with Puppeteer.
 // Puppeteer calls function.toString and send the code into Chromium.
@@ -46,7 +46,7 @@ const jobList = `(async () => {
   return jobs;
 })()`;
 
-export const launchGoogleWebScraper = async () => {
+const launchGoogleWebScraper = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const jobsUrl =
@@ -57,3 +57,5 @@ export const launchGoogleWebScraper = async () => {
   await browser.close();
   return jobData;
 };
+
+module.exports = { launchGoogleWebScraper };

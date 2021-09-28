@@ -21,11 +21,11 @@ const launchCandidateWebScraper = async () => {
     page.select('select[class="form-control select2-hidden-accessible"]', '6014'),
     page.waitForNavigation({ waitUntil: 'networkidle2' })
   ]);
-  await page.goto(signalHireLoginURL, { waitUntil: 'networkidle2' });
+
   console.log('New Page URL:', page.url());
 
-  // Evaluate page
-  const candidateData = await page.evaluate(async () => {
+  // Evaluate page and grab specific data
+  const candidateData = await page.evaluate(() => {
     const candidateResultNodes = document.querySelector('.sp-candList__inner');
 
     let candidateNames = [];
@@ -36,6 +36,30 @@ const launchCandidateWebScraper = async () => {
       candidateNames.push(node.innerText);
     });
 
+    let candidateJobTitles = [];
+    const candidateJobTitleNodes = candidateResultNodes.querySelectorAll(
+      'div[class="sp-candItem__subName"]'
+    );
+    candidateJobTitleNodes?.forEach((node) => {
+      candidateJobTitles.push(node.innerText);
+    });
+
+    let candidateLocations = [];
+    const candidateLocationNodes = candidateResultNodes.querySelectorAll(
+      'span[class="sp-candItem__city"]'
+    );
+    candidateLocationNodes?.forEach((node) => {
+      candidateLocations.push(node.innerText);
+    });
+
+    let candidatePreviousJobs = [];
+    const candidatePreviousJobNodes = candidateResultNodes.querySelectorAll(
+      'div[class="sp-candItem__metaList text-lighter"] > span'
+    );
+    candidatePreviousJobNodes?.forEach((node) => {
+      candidatePreviousJobs.push(node.innerText);
+    });
+
     let candidateSkills = [];
     const candidateSkillNodes = candidateResultNodes.querySelectorAll(
       'div[class="sp-candItem__metaList text-lighter"] > span'
@@ -44,19 +68,24 @@ const launchCandidateWebScraper = async () => {
       candidateSkills.push(node.innerText);
     });
 
-    const candidateArray = [];
+    const candidates = [];
     for (let i = 0; i < candidateNames.length; i++) {
-      candidateArray.push({
-        candidateName: candidateNames[i],
-        candidateSkills: candidateSkills[i]
+      candidates.push({
+        candidate_name: candidateNames[i],
+        candidate_job_title: candidateJobTitles[i],
+        candidate_location: candidateLocations[i],
+        candidate_previous_jobs: candidatePreviousJobs[i],
+        candidate_skills: candidateSkills[i]
       });
     }
 
-    return candidateArray;
+    return candidates;
   });
 
-  console.log({ candidateData });
   await browser.close();
+  return candidateData;
 };
 
-launchCandidateWebScraper();
+console.log(launchCandidateWebScraper());
+
+module.exports = { launchCandidateWebScraper };

@@ -7,4 +7,4 @@ exports.up = (knex) =>
     tbl.text('jobs_url').notNullable();
   });
 
-exports.down = (knex) => knex.schema.dropTableIfExists('google');
+exports.down = (knex) => knex.schema.dropTableIfExists('jobs');
