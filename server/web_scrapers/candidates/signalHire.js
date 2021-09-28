@@ -22,7 +22,12 @@ const launchCandidateWebScraper = async () => {
     page.waitForNavigation({ waitUntil: 'networkidle2' })
   ]);
 
-  console.log('New Page URL:', page.url());
+  // Check for paywall that limits number of searches and bypass it with generic search
+  if (page.url() === 'https://www.signalhire.com/payment/?via=candidatesSearchResultsLimitation') {
+    await page.goto('https://www.signalhire.com/candidates/47dc037faace4abeb0727d6f4d0f3079', {
+      waitUntil: 'networkidle2'
+    });
+  }
 
   // Evaluate page and grab specific data
   const candidateData = await page.evaluate(() => {
@@ -62,7 +67,7 @@ const launchCandidateWebScraper = async () => {
 
     let candidateSkills = [];
     const candidateSkillNodes = candidateResultNodes.querySelectorAll(
-      'div[class="sp-candItem__metaList text-lighter"] > span'
+      'li[class="sp-candItem"] > div:nth-child(5) > div > span'
     );
     candidateSkillNodes?.forEach((node) => {
       candidateSkills.push(node.innerText);
@@ -74,8 +79,8 @@ const launchCandidateWebScraper = async () => {
         candidate_name: candidateNames[i],
         candidate_job_title: candidateJobTitles[i],
         candidate_location: candidateLocations[i],
-        candidate_previous_jobs: candidatePreviousJobs[i],
-        candidate_skills: candidateSkills[i]
+        candidate_previous_jobs: [candidatePreviousJobs[i]],
+        candidate_skills: [candidateSkills[i]]
       });
     }
 
@@ -85,7 +90,5 @@ const launchCandidateWebScraper = async () => {
   await browser.close();
   return candidateData;
 };
-
-console.log(launchCandidateWebScraper());
 
 module.exports = { launchCandidateWebScraper };

@@ -16,17 +16,17 @@ app.listen(port, () => {
 
 const launchWebScrapers = async () => {
   const googleJobs = await launchGoogleWebScraper();
-  // const candidates = await launchCandidateWebScraper();
+  const candidates = await launchCandidateWebScraper();
 
   Promise.all(googleJobs)
     .then((jobData) => {
       db('jobs')
         .del()
         .then((res) => {
-          console.log(`Deleted ${res} records`);
+          console.log(`Deleted ${res} job records`);
           db.batchInsert('jobs', jobData)
             .returning('*')
-            .then((res) => console.log(`Inserted ${res.length} records`))
+            .then((res) => console.log(`Inserted ${res.length} job records`))
             .catch((err) =>
               console.log('Could not insert data. Failed with the following error: ', err)
             );
@@ -37,24 +37,25 @@ const launchWebScrapers = async () => {
     })
     .catch((err) => console.log('Could not get data. Failed with the following error: ', err));
 
-  // Promise.all(candidates)
-  //   .then((candidateData) => {
-  //     db('candidates')
-  //       .del()
-  //       .then((res) => {
-  //         console.log(`Deleted ${res} records`);
-  //         db.batchInsert('candidates', candidateData)
-  //           .returning('*')
-  //           .then((res) => console.log(`Inserted ${res.length} records`))
-  //           .catch((err) =>
-  //             console.log('Could not insert data. Failed with the following error: ', err)
-  //           );
-  //       })
-  //       .catch((err) =>
-  //         console.log('Could not insert data. Failed with the following error: ', err)
-  //       );
-  //   })
-  //   .catch((err) => console.log('Could not get data. Failed with the following error: ', err));
+  Promise.all(candidates)
+    .then((candidateData) => {
+      console.log({ candidateData });
+      db('candidates')
+        .del()
+        .then((res) => {
+          console.log(`Deleted ${res} candidate records`);
+          db.batchInsert('candidates', candidateData)
+            .returning('*')
+            .then((res) => console.log(`Inserted ${res.length} candidate records`))
+            .catch((err) =>
+              console.log('Could not insert data. Failed with the following error: ', err)
+            );
+        })
+        .catch((err) =>
+          console.log('Could not insert data. Failed with the following error: ', err)
+        );
+    })
+    .catch((err) => console.log('Could not get data. Failed with the following error: ', err));
 };
 
 launchWebScrapers();
