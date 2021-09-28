@@ -4,25 +4,25 @@ const launchCandidateWebScraper = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  // This page will redirect to login until we log in
+  // This page will redirect to "/login" until we log in
   const signalHireLoginURL = 'https://www.signalhire.com/candidates';
   await page.goto(signalHireLoginURL, { waitUntil: 'networkidle2' });
 
-  // Input info
+  // Input login info
   await page.type('#_email', 'faang.connector@gmail.com'); // update later with env variable
   await page.type('#_password', 'Blahspaghetti123'); // update later with env variable
 
-  // Click and wait for navigation
+  // Click submit and wait for navigation
   await Promise.all([page.click('#submit'), page.waitForNavigation({ waitUntil: 'networkidle2' })]);
 
-  // Select "software" saved search from dropdown
-  await Promise.all([
-    page.waitForSelector('select[class="form-control select2-hidden-accessible"]')
-  ]);
+  // Select "software" saved search from dropdown menu on new page once logged in
+  await Promise.all([page.waitForSelector('.sp-formGroup__content')]);
   await Promise.all([
     page.select('select[class="form-control select2-hidden-accessible"]', '6014'),
     page.waitForNavigation({ waitUntil: 'networkidle2' })
   ]);
+  await page.goto(signalHireLoginURL, { waitUntil: 'networkidle2' });
+  console.log('New Page URL:', page.url());
 
   // Evaluate page
   const candidateData = await page.evaluate(async () => {
