@@ -1,9 +1,9 @@
 const puppeteer = require('puppeteer');
 
-const launchGoogleWebScraper = async () => {
+const launchCandidateWebScraper = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  
+
   // This page will redirect to login until we log in
   const signalHireLoginURL = 'https://www.signalhire.com/candidates';
   await page.goto(signalHireLoginURL, { waitUntil: 'networkidle2' });
@@ -59,4 +59,4 @@ const launchGoogleWebScraper = async () => {
   await browser.close();
 };
 
-launchGoogleWebScraper();
+launchCandidateWebScraper();
