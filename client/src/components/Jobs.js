@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { Candidates } from './Candidates';
 
 export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateList }) => {
   const [selectedJob, setSelectedJob] = useState({
@@ -22,6 +23,39 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
 
     setUpperCaseCandidates(candidates);
   }, [jobList, candidateList]);
+
+  const renderComponent = () => {
+    if (selectedJob.title) {
+      return <Candidates />;
+    }
+
+    return (
+      <div>
+        {jobList.length === 0 ? (
+          <Job
+            onClick={() => setSelectedCompany('')}
+            title="return to homepage"
+            noJobs>{`No ${companyName} jobs available`}</Job>
+        ) : (
+          jobList.map((job, i) => {
+            return (
+              <Job
+                className={`${selectedCompany}-job`}
+                title={`${companyName} job`}
+                key={i}
+                onClick={() =>
+                  setSelectedJob({ title: job.job_title, qualifications: job.job_qualifications })
+                }>
+                <JobTitle>{job.job_title}</JobTitle>
+                <JobQualifications>{job.job_qualifications}</JobQualifications>
+                <CandidatesButton>{renderMatches(job)}</CandidatesButton>
+              </Job>
+            );
+          })
+        )}
+      </div>
+    );
+  };
 
   const candidateSkills = upperCaseCandidates.map((candidate) =>
     candidate.skills.map((skill) => {
@@ -58,37 +92,14 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
     return `${matchNumber.length} matching candidates`;
   };
 
-  return (
-    <div className="jobs-container">
-      {jobList.length === 0 ? (
-        <Job
-          onClick={() => setSelectedCompany('')}
-          title="return to homepage">{`No ${companyName} jobs available`}</Job>
-      ) : (
-        jobList.map((job, i) => {
-          return (
-            <Job
-              className={`${selectedCompany}-job`}
-              title={`${companyName} job`}
-              key={i}
-              onClick={() =>
-                setSelectedJob({ title: job.job_title, qualifications: job.job_qualifications })
-              }>
-              <JobTitle>{job.job_title}</JobTitle>
-              <JobQualifications>{job.job_qualifications}</JobQualifications>
-              <button>{renderMatches(job)}</button>
-            </Job>
-          );
-        })
-      )}
-    </div>
-  );
+  return <div className="jobs-container">{renderComponent()}</div>;
 };
 
 const Job = styled('div')`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: ${(props) => (props.noJobs ? 'center' : 'space-between')};
+  align-items: ${(props) => props.noJobs && 'center'};
   border: 2px solid black;
   border-radius: 3px;
   margin-bottom: 10px;
@@ -106,4 +117,13 @@ const JobTitle = styled('h4')`
 
 const JobQualifications = styled('h6')`
   margin: 5px;
+`;
+
+const CandidatesButton = styled('button')`
+  border: 3px double grey;
+  border-radius: 3px;
+  cursor: pointer;
+  &:hover {
+    background: white;
+  }
 `;
