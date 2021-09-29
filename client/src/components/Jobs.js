@@ -38,17 +38,20 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
       })
     );
 
-    console.log(candidateSkills);
+    // console.log(candidateSkills);
 
-    const newSkills = candidateSkills.map((s, i) => s.concat[i + 1]);
-    console.log(newSkills);
+    let a = candidateSkills.map((skill) => {
+      // console.log('skill', skill);
+      return skill.map((s) => {
+        console.log('skill', s.skill);
+        if (upperCaseJob.job_qualifications.includes(s.skill)) {
+          return s.skill;
+        }
+      });
+    });
 
-    // let a = [];
-    // if (upperCaseJob.job_qualifications.includes('C++')) {
-    //   a.push('hi');
-    // }
-    // console.log({ a });
-    // return '2 matching candidates';
+    console.log({ a });
+    return '2 matching candidates';
   };
 
   return (
