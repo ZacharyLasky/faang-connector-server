@@ -47,6 +47,7 @@ function App() {
       {selectedCompany ? (
         <Jobs
           jobList={filteredJobs}
+          candidateList={candidates}
           selectedCompany={selectedCompany}
           setSelectedCompany={(company) => setSelectedCompany(company)}
         />
