@@ -6,6 +6,7 @@ function App() {
   return (
     <AppContainer className="App">
       <h1>FAANG Connector</h1>
+      <h2>Connect top tech jobs with top tech candidates.</h2>
       <Jobs />
     </AppContainer>
   );
