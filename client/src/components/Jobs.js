@@ -23,6 +23,12 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
     setUpperCaseCandidates(candidates);
   }, [jobList, candidateList]);
 
+  const candidateSkills = upperCaseCandidates.map((candidate) =>
+    candidate.skills.map((skill) => {
+      return { candidate: candidate.name, skill: skill };
+    })
+  );
+
   const renderMatches = (job) => {
     const upperCaseJob = {
       ...job,
@@ -30,28 +36,26 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
         .map((qualification) => qualification.toUpperCase())
         .join('')
     };
-    // console.log({ upperCaseJob });
 
-    const candidateSkills = upperCaseCandidates.map((candidate) =>
-      candidate.skills.map((skill) => {
-        return { candidate: candidate.name, skill: skill };
-      })
-    );
-
-    // console.log(candidateSkills);
-
-    let a = candidateSkills.map((skill) => {
-      // console.log('skill', skill);
+    const skillMatch = candidateSkills.map((skill) => {
       return skill.map((s) => {
-        console.log('skill', s.skill);
-        if (upperCaseJob.job_qualifications.includes(s.skill)) {
-          return s.skill;
+        if (upperCaseJob.job_qualifications.includes(s.skill) && s.skill !== '') {
+          return {
+            job: upperCaseJob.job_title,
+            name: s.candidate,
+            skill: s.skill
+          };
         }
       });
     });
 
-    console.log({ a });
-    return '2 matching candidates';
+    const matches = skillMatch.map((match) => match.filter((m) => m !== undefined));
+    const matchNumber = matches.filter((match) => match.length !== 0);
+
+    if (matchNumber.length === 1) {
+      return '1 matching candidate';
+    }
+    return `${matchNumber.length} matching candidates`;
   };
 
   return (
