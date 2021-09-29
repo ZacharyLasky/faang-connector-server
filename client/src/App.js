@@ -1,23 +1,23 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import styled from 'styled-components';
+import { Jobs } from './components/Jobs';
 
 function App() {
-  useEffect(() => {
-    axios
-      .get('http://localhost:4000/jobs')
-      .then((res) => {
-        console.log({ res });
-      })
-      .catch((err) => {
-        console.log({ err });
-      });
-  }, []);
-
   return (
-    <div className="App">
-      <h1>FAANG Connector Client</h1>
-    </div>
+    <AppContainer className="App">
+      <h1>FAANG Connector</h1>
+      <Jobs />
+    </AppContainer>
   );
 }
 
 export default App;
+
+const AppContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-family: Arial, sans-serif;
+`;
