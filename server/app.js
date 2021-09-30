@@ -44,7 +44,7 @@ app.get('/candidates', (req, res) => {
     });
 });
 
-const launchWebScrapers = async () => {
+(async () => {
   const googleJobs = await launchGoogleWebScraper();
   const candidates = await launchCandidateWebScraper();
 
@@ -87,6 +87,4 @@ const launchWebScrapers = async () => {
     .catch((err) =>
       console.log('Could not get candidate data. Failed with the following error: ', err)
     );
-};
-
-launchWebScrapers();
+})();

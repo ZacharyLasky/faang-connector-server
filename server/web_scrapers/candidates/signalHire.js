@@ -4,16 +4,22 @@ const launchCandidateWebScraper = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  // This page will redirect to "/login" until we log in
-  const signalHireLoginURL = 'https://www.signalhire.com/candidates';
+  const signalHireLoginURL = 'https://www.signalhire.com/login';
   await page.goto(signalHireLoginURL, { waitUntil: 'networkidle2' });
 
-  // Input login info
-  await page.type('#_email', 'faang.connector@gmail.com'); // update later with env variable
-  await page.type('#_password', 'Blahspaghetti123'); // update later with env variable
+  // Check for login in URL in case somehow you are already logged in
+  // If you are logged in, "/login" will automatically redirect to "/candidates"
+  if (page.url().includes('/login')) {
+    // Input login info
+    await page.type('#_email', 'faang.connector@gmail.com'); // update later with env variable
+    await page.type('#_password', 'Blahspaghetti123'); // update later with env variable
 
-  // Click submit and wait for navigation
-  await Promise.all([page.click('#submit'), page.waitForNavigation({ waitUntil: 'networkidle2' })]);
+    // Click submit and wait for navigation
+    await Promise.all([
+      page.click('#submit'),
+      page.waitForNavigation({ waitUntil: 'networkidle0' })
+    ]);
+  }
 
   // Select "software" saved search from dropdown menu on new page once logged in
   await Promise.all([page.waitForSelector('.sp-formGroup__content')]);
@@ -23,8 +29,8 @@ const launchCandidateWebScraper = async () => {
   ]);
 
   // Check for paywall that limits number of searches and bypass it with generic search
-  if (page.url() === 'https://www.signalhire.com/payment/?via=candidatesSearchResultsLimitation') {
-    await page.goto('https://www.signalhire.com/candidates/47dc037faace4abeb0727d6f4d0f3079', {
+  if (page.url().includes('candidatesSearchResultsLimitation')) {
+    await page.goto(signalHireLoginURL, {
       waitUntil: 'networkidle2'
     });
   }
