@@ -6,7 +6,9 @@ export const About = () => {
     <Container className="about-container" title="About Website">
       <Title>Connect top tech jobs with top tech candidates!</Title>
       <Directions>Click the top "homepage" icon to return home from any page.</Directions>
-      <Directions>Click a company icon to see job results from that company.</Directions>
+      <Directions>
+        Click a company icon to see current tech job listings from that company.
+      </Directions>
       <Directions>
         Click a job result to see candidates that would be a good match for that job.
       </Directions>
@@ -30,6 +32,6 @@ const Title = styled('h4')`
   margin: 5px;
 `;
 
-const Directions = styled('h6')`
+const Directions = styled('h5')`
   margin: 5px;
 `;
