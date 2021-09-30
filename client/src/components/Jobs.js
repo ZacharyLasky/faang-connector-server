@@ -43,14 +43,13 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
                 className={`${selectedCompany}-job`}
                 title={`${companyName} job`}
                 key={i}
-                onClick={() =>
-                  setSelectedJob({ title: job.job_title, qualifications: job.job_qualifications })
-                }>
+                onClick={() => {
+                  setSelectedJob({ title: job.job_title, qualifications: job.job_qualifications });
+                  renderMatches(job, true);
+                }}>
                 <JobTitle>{job.job_title}</JobTitle>
                 <JobQualifications>{job.job_qualifications}</JobQualifications>
-                <CandidatesButton onClick={() => renderMatches(job, true)}>
-                  {renderMatches(job)}
-                </CandidatesButton>
+                <CandidatesNumber>{renderMatches(job)}</CandidatesNumber>
               </Job>
             );
           })
@@ -134,11 +133,10 @@ const JobQualifications = styled('h6')`
   margin: 5px;
 `;
 
-const CandidatesButton = styled('button')`
+const CandidatesNumber = styled('div')`
+  display: flex;
+  justify-content: center;
   border: 3px double grey;
   border-radius: 3px;
   cursor: pointer;
-  &:hover {
-    background: white;
-  }
 `;

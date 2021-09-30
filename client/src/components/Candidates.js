@@ -7,7 +7,7 @@ export const Candidates = ({ candidateList }) => {
       {candidateList?.map((candidate) => {
         console.log(candidate);
         return (
-          <Candidate>
+          <Candidate title="Candidate">
             <CandidateName>{candidate.candidate_name}</CandidateName>
             <CandidateLocation>{candidate.candidate_location}</CandidateLocation>
             <CandidatePreviousJob>
@@ -34,10 +34,6 @@ const Candidate = styled('div')`
   margin-bottom: 10px;
   width: 280px;
   height: 220px;
-  cursor: pointer;
-  &:hover {
-    background: #f0f8fa;
-  }
 `;
 
 const CandidateName = styled('h4')`
