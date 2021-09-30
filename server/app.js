@@ -1,6 +1,7 @@
 import express from 'express';
 import db from './data/db';
-const cors = require('cors');
+import cors from 'cors';
+import cron from 'node-cron';
 import { launchGoogleWebScraper } from './web_scrapers/jobs/google';
 import { launchCandidateWebScraper } from './web_scrapers/candidates/signalHire';
 
@@ -44,7 +45,7 @@ app.get('/candidates', (req, res) => {
     });
 });
 
-(async () => {
+const launchWebScrapers = async () => {
   const googleJobs = await launchGoogleWebScraper();
   const candidates = await launchCandidateWebScraper();
 
@@ -87,4 +88,7 @@ app.get('/candidates', (req, res) => {
     .catch((err) =>
       console.log('Could not get candidate data. Failed with the following error: ', err)
     );
-})();
+};
+
+// Insert jobs/candidates once every day at midnight
+cron.schedule('0 0 0 * * *', launchGoogleWebScraper);
