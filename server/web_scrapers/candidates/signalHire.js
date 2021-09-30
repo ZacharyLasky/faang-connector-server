@@ -73,7 +73,7 @@ const launchCandidateWebScraper = async () => {
 
     let candidateSkills = [];
     const candidateSkillNodes = candidateResultNodes.querySelectorAll(
-      'li[class="sp-candItem"] > div:nth-child(5) > div > span'
+      '.sp-candItem > div:nth-child(5) > div > span'
     );
     candidateSkillNodes?.forEach((node) => {
       candidateSkills.push(node.innerText);
