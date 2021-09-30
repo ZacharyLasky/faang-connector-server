@@ -7,8 +7,8 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
     title: '',
     qualifications: []
   });
+  const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [upperCaseCandidates, setUpperCaseCandidates] = useState([]);
-  const [candidateMatches, setCandidateMatches] = useState(0);
   const companyName = selectedCompany[0].toUpperCase() + selectedCompany.slice(1);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
 
   const renderComponent = () => {
     if (selectedJob.title) {
-      return <Candidates />;
+      return <Candidates candidateList={selectedCandidates} />;
     }
 
     return (
@@ -48,7 +48,9 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
                 }>
                 <JobTitle>{job.job_title}</JobTitle>
                 <JobQualifications>{job.job_qualifications}</JobQualifications>
-                <CandidatesButton>{renderMatches(job)}</CandidatesButton>
+                <CandidatesButton onClick={() => renderMatches(job, true)}>
+                  {renderMatches(job)}
+                </CandidatesButton>
               </Job>
             );
           })
@@ -57,19 +59,19 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
     );
   };
 
-  const candidateSkills = upperCaseCandidates.map((candidate) =>
-    candidate.skills.map((skill) => {
-      return { candidate: candidate.name, skill: skill };
-    })
-  );
-
-  const renderMatches = (job) => {
+  const renderMatches = (job, singleJob = false) => {
     const upperCaseJob = {
       ...job,
       job_qualifications: job.job_qualifications
         .map((qualification) => qualification.toUpperCase())
         .join('')
     };
+
+    const candidateSkills = upperCaseCandidates.map((candidate) =>
+      candidate.skills.map((skill) => {
+        return { candidate: candidate.name, skill: skill };
+      })
+    );
 
     const skillMatch = candidateSkills.map((skill) => {
       return skill.map((s) => {
@@ -84,12 +86,25 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
     });
 
     const matches = skillMatch.map((match) => match.filter((m) => m !== undefined));
-    const matchNumber = matches.filter((match) => match.length !== 0);
+    const filteredMatches = matches.filter((match) => match.length !== 0);
+    const filteredMatchesNames = filteredMatches.map((match) => match.map((m) => m.name)).join('');
+    const fullCandidateMatches = candidateList.map((candidate) => {
+      if (filteredMatchesNames.includes(candidate.candidate_name)) {
+        return candidate;
+      }
+    });
+    const filteredCandidates = fullCandidateMatches.filter((match) => match);
 
-    if (matchNumber.length === 1) {
+    if (singleJob) {
+      setSelectedCandidates(filteredCandidates);
+      return;
+    }
+
+    if (filteredCandidates.length === 1) {
       return '1 matching candidate';
     }
-    return `${matchNumber.length} matching candidates`;
+
+    return `${filteredCandidates.length} matching candidates`;
   };
 
   return <div className="jobs-container">{renderComponent()}</div>;
@@ -103,7 +118,7 @@ const Job = styled('div')`
   border: 2px solid black;
   border-radius: 3px;
   margin-bottom: 10px;
-  width: 260px;
+  width: 280px;
   height: 220px;
   cursor: pointer;
   &:hover {
