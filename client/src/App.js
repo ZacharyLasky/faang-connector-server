@@ -11,7 +11,7 @@ function App() {
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState('');
-  const [about, setAbout] = useState(false);
+  const [about, setAbout] = useState(true);
 
   useEffect(() => {
     axios

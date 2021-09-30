@@ -4,22 +4,27 @@ import styled from 'styled-components';
 export const Candidates = ({ candidateList }) => {
   return (
     <div className="candidates-container">
-      {candidateList?.map((candidate) => {
-        console.log(candidate);
-        return (
-          <Candidate title="Candidate">
-            <CandidateName>{candidate.candidate_name}</CandidateName>
-            <CandidateLocation>{candidate.candidate_location}</CandidateLocation>
-            <CandidatePreviousJob>
-              {candidate.candidate_previous_jobs
-                .map((job) => job)
-                .concat(candidate.candidate_job_title + ', ')
-                .reverse()}
-            </CandidatePreviousJob>
-            <CandidateSkills>{candidate.candidate_skills.map((skill) => skill)}</CandidateSkills>
-          </Candidate>
-        );
-      })}
+      {candidateList.length === 0 ? (
+        <Candidate title={`No candidates match this job`} noCandidates>
+          No candidates match this job
+        </Candidate>
+      ) : (
+        candidateList?.map((candidate) => {
+          return (
+            <Candidate title="Candidate">
+              <CandidateName>{candidate.candidate_name}</CandidateName>
+              <CandidateLocation>{candidate.candidate_location}</CandidateLocation>
+              <CandidatePreviousJob>
+                {candidate.candidate_previous_jobs
+                  .map((job) => job)
+                  .concat(candidate.candidate_job_title + ', ')
+                  .reverse()}
+              </CandidatePreviousJob>
+              <CandidateSkills>{candidate.candidate_skills.map((skill) => skill)}</CandidateSkills>
+            </Candidate>
+          );
+        })
+      )}
     </div>
   );
 };
@@ -27,8 +32,8 @@ export const Candidates = ({ candidateList }) => {
 const Candidate = styled('div')`
   display: flex;
   flex-direction: column;
-  justify-content: ${(props) => (props.noJobs ? 'center' : 'space-between')};
-  align-items: ${(props) => props.noJobs && 'center'};
+  justify-content: ${(props) => (props.noCandidates ? 'center' : 'space-between')};
+  align-items: ${(props) => props.noCandidates && 'center'};
   border: 2px solid black;
   border-radius: 3px;
   margin-bottom: 10px;

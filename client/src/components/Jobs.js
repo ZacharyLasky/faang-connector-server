@@ -33,8 +33,7 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
       <div>
         {jobList.length === 0 ? (
           <Job
-            onClick={() => setSelectedCompany('')}
-            title="return to homepage"
+            title={`No ${companyName} jobs available`}
             noJobs>{`No ${companyName} jobs available`}</Job>
         ) : (
           jobList.map((job, i) => {
@@ -119,9 +118,9 @@ const Job = styled('div')`
   margin-bottom: 10px;
   width: 280px;
   height: 220px;
-  cursor: pointer;
+  cursor: ${(props) => !props.noJobs && 'pointer'};
   &:hover {
-    background: #f0f8fa;
+    background: ${(props) => !props.noJobs && '#f0f8fa'};
   }
 `;
 
