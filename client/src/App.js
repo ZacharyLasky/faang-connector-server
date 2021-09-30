@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { AiFillHome } from 'react-icons/ai';
+import { AiFillHome, AiFillQuestionCircle } from 'react-icons/ai';
 import { Companies } from './components/Companies';
 import { Jobs } from './components/Jobs';
+import { About } from './components/About';
 
 function App() {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState('');
+  const [about, setAbout] = useState(false);
 
   useEffect(() => {
     axios
@@ -39,12 +41,22 @@ function App() {
   return (
     <AppContainer className="app">
       <Header className="header">
-        <HomeIconWrapper className="home-icon-wrapper" onClick={() => setSelectedCompany('')}>
+        <HomeIconWrapper
+          className="home-icon-wrapper"
+          onClick={() => {
+            setAbout(false);
+            setSelectedCompany('');
+          }}>
           <AiFillHome size="48px" className="home-icon" title="return to homepage" />
         </HomeIconWrapper>
         <Title>FAANG Connector</Title>
+        <AboutIconWrapper className="about-icon-wrapper" onClick={() => setAbout(true)}>
+          <AiFillQuestionCircle size="24px" className="about-icon" />
+        </AboutIconWrapper>
       </Header>
-      {selectedCompany ? (
+      {about ? (
+        <About />
+      ) : selectedCompany ? (
         <Jobs
           jobList={filteredJobs}
           candidateList={candidates}
@@ -78,6 +90,8 @@ const HomeIconWrapper = styled('div')`
   cursor: pointer;
   height: 48px;
 `;
+
+const AboutIconWrapper = styled(HomeIconWrapper)``;
 
 const Title = styled('h1')`
   margin-bottom: 0px;
