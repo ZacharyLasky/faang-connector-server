@@ -1,10 +1,9 @@
-require('dotenv').config();
-import express from 'express';
-import db from './data/db';
-import cors from 'cors';
-import cron from 'node-cron';
-import { launchGoogleWebScraper } from './web_scrapers/jobs/google';
-import { launchCandidateWebScraper } from './web_scrapers/candidates/signalHire';
+const express = require('express');
+const db = require('./data/db');
+const cors = require('cors');
+const cron = require('node-cron');
+const { launchGoogleWebScraper } = require('./web_scrapers/jobs/google');
+const { launchCandidateWebScraper } = require('./web_scrapers/candidates/signalHire');
 
 const app = express();
 const port = process.env.PORT || 4000;
