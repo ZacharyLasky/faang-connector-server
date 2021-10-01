@@ -14,9 +14,6 @@ module.exports = {
     migrations: {
       directory: './data/migrations'
     },
-    ssl: {
-      rejectUnauthorized: false
-    }
   },
   production: {
     client: 'pg',
@@ -24,8 +21,5 @@ module.exports = {
     migrations: {
       directory: './data/migrations'
     },
-    ssl: {
-      rejectUnauthorized: false
-    }
   }
 };
