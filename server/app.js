@@ -1,3 +1,4 @@
+require('dotenv').config();
 import express from 'express';
 import db from './data/db';
 import cors from 'cors';
