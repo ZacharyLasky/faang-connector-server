@@ -9,9 +9,9 @@ export const Candidates = ({ candidateList }) => {
           No candidates match this job
         </Candidate>
       ) : (
-        candidateList?.map((candidate) => {
+        candidateList?.map((candidate, i) => {
           return (
-            <Candidate title="Candidate">
+            <Candidate title="Candidate" key={i}>
               <CandidateName>{candidate.candidate_name}</CandidateName>
               <CandidateLocation>{candidate.candidate_location}</CandidateLocation>
               <CandidatePreviousJob>
