@@ -48,7 +48,7 @@ const Company = styled('div')`
   border: 2px solid black;
   border-radius: 3px;
   margin-bottom: 10px;
-  width: 280px;
+  width: 270px;
   height: 220px;
   cursor: pointer;
   &:hover {
