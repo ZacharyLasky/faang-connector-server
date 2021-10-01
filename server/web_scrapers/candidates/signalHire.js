@@ -1,6 +1,9 @@
 const puppeteer = require('puppeteer');
+require('dotenv').config();
 
 const launchCandidateWebScraper = async () => {
+  console.log('email', process.env.SIGNAL_HIRE_EMAIL);
+  console.log('email', process.env.SIGNAL_HIRE_PASSWORD);
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
@@ -10,9 +13,12 @@ const launchCandidateWebScraper = async () => {
   // Check for login in URL in case somehow you are already logged in
   // If you are logged in, "/login" will automatically redirect to "/candidates"
   if (page.url().includes('/login')) {
+    const email = process.env.SIGNAL_HIRE_EMAIL;
+    const password = process.env.SIGNAL_HIRE_PASSWORD;
+
     // Input login info
-    await page.type('#_email', 'faang.connector@gmail.com'); // update later with env variable
-    await page.type('#_password', 'Blahspaghetti123'); // update later with env variable
+    await page.type('#_email', email);
+    await page.type('#_password', password);
 
     // Click submit and wait for navigation
     await Promise.all([
@@ -94,7 +100,10 @@ const launchCandidateWebScraper = async () => {
   });
 
   await browser.close();
+  console.log({ candidateData });
   return candidateData;
 };
+
+launchCandidateWebScraper();
 
 module.exports = { launchCandidateWebScraper };

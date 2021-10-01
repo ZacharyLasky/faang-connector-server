@@ -80,6 +80,7 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
             skill: s.skill
           };
         }
+        return undefined;
       });
     });
 
@@ -90,6 +91,7 @@ export const Jobs = ({ selectedCompany, setSelectedCompany, jobList, candidateLi
       if (filteredMatchesNames.includes(candidate.candidate_name)) {
         return candidate;
       }
+      return undefined;
     });
     const filteredCandidates = fullCandidateMatches.filter((match) => match);
 
