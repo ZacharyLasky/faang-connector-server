@@ -13,6 +13,9 @@ module.exports = {
     connection: process.env.DATABASE_URL,
     migrations: {
       directory: './data/migrations'
+    },
+    ssl: {
+      rejectUnauthorized: false
     }
   },
   production: {
