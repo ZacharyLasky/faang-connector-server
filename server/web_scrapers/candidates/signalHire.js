@@ -100,10 +100,7 @@ const launchCandidateWebScraper = async () => {
   });
 
   await browser.close();
-  console.log({ candidateData });
   return candidateData;
 };
-
-launchCandidateWebScraper();
 
 module.exports = { launchCandidateWebScraper };
