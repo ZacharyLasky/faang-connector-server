@@ -2,7 +2,10 @@ const puppeteer = require('puppeteer');
 require('dotenv').config();
 
 const launchCandidateWebScraper = async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   const page = await browser.newPage();
 
   const signalHireLoginURL = 'https://www.signalhire.com/login';
