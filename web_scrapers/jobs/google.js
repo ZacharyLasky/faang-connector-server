@@ -47,7 +47,10 @@ const jobList = `(async () => {
 })()`;
 
 const launchGoogleWebScraper = async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   const page = await browser.newPage();
   const jobsUrl =
     'https://careers.google.com/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&company=Google&distance=50&employment_type=FULL_TIME&employment_type=TEMPORARY&jex=ENTRY_LEVEL';
