@@ -13,6 +13,8 @@ const launchCandidateWebScraper = async () => {
   if (page.url().includes('/login')) {
     const email = process.env.SIGNAL_HIRE_EMAIL;
     const password = process.env.SIGNAL_HIRE_PASSWORD;
+    console.log({ email });
+    console.log({ password });
 
     // Input login info
     await page.type('#_email', email);
