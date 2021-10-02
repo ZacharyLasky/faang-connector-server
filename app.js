@@ -19,7 +19,6 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-  console.log('hit!');
   res.send('FAANG Connector Server');
 });
 
