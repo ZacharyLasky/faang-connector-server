@@ -2,8 +2,6 @@ const puppeteer = require('puppeteer');
 require('dotenv').config();
 
 const launchCandidateWebScraper = async () => {
-  console.log('email', process.env.SIGNAL_HIRE_EMAIL);
-  console.log('email', process.env.SIGNAL_HIRE_PASSWORD);
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
