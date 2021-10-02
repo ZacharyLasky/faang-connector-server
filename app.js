@@ -90,4 +90,4 @@ const launchWebScrapers = async () => {
 };
 
 // Insert jobs/candidates once every day at midnight
-launchWebScrapers();
+cron.schedule('0 0 0 * * *', launchWebScrapers);
