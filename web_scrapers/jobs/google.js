@@ -37,7 +37,7 @@ const jobList = `(async () => {
         job_qualifications: [...new Set(jobQualifications)].filter((qualification) =>
           text.includes(qualification)
         ),
-        company: 'google',
+        company: 'Google',
         jobs_url: jobsUrl
       });
     }
