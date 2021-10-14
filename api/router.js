@@ -6,7 +6,7 @@ const candidatesRoute = require('./candidatesRoute');
 
 router.use(cors({ origin: '*' }));
 router.use('/api/jobs', jobsRoute);
-router.use('/api/items', candidatesRoute);
+router.use('/api/candidates', candidatesRoute);
 
 router.get('/', (req, res) => {
   res.send('FAANG Connector Server');
