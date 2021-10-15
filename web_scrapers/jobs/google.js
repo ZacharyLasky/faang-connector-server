@@ -58,7 +58,10 @@ const launchGoogleWebScraper = async () => {
   const jobData = await page.evaluate(jobList);
 
   await browser.close();
+  console.log({ jobData });
   return jobData;
 };
+
+launchGoogleWebScraper();
 
 module.exports = { launchGoogleWebScraper };
