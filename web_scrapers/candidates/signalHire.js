@@ -42,7 +42,7 @@ const launchCandidateWebScraper = async () => {
     });
   }
 
-  // Evaluate page and grab specific data
+  // Run headless and grab specific data
   const candidateData = await page.evaluate(() => {
     const candidateResultNodes = document.querySelector('.sp-candList__inner');
 
