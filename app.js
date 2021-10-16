@@ -9,5 +9,3 @@ router.listen(port, () => {
 
 // Insert jobs/candidates once every day at midnight
 cron.schedule('0 0 0 * * *', launchWebScrapers);
-
-launchWebScrapers();
